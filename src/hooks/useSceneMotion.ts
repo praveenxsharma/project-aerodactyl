@@ -16,6 +16,8 @@ export function useSceneMotion() {
     if (prefersReducedMotion.matches) {
       node.style.setProperty('--pointer-x', '50%')
       node.style.setProperty('--pointer-y', '30%')
+      node.style.setProperty('--focus-x', '50%')
+      node.style.setProperty('--focus-y', '30%')
       node.style.setProperty('--trail-x', '50%')
       node.style.setProperty('--trail-y', '30%')
       node.style.setProperty('--scene-shift-x', '0px')
@@ -40,13 +42,15 @@ export function useSceneMotion() {
     const updateTarget = (clientX: number, clientY: number) => {
       target.x = Math.max(0, Math.min(1, clientX / window.innerWidth))
       target.y = Math.max(0, Math.min(1, clientY / window.innerHeight))
-      setPointer(target.x, target.y)
+      if (isCoarsePointer()) {
+        setPointer(target.x, target.y)
+      }
       scheduleUpdate()
     }
 
     const updateStyles = () => {
-      const pointerEase = isCoarsePointer() ? 0.28 : 0.2
-      const trailEase = isCoarsePointer() ? 0.22 : 0.18
+      const pointerEase = isCoarsePointer() ? 0.22 : 0.14
+      const trailEase = isCoarsePointer() ? 0.18 : 0.11
       const scrollEase = isCoarsePointer() ? 0.1 : 0.14
 
       current.x += (target.x - current.x) * pointerEase
@@ -59,6 +63,8 @@ export function useSceneMotion() {
       const shiftY = (current.y - 0.5) * (isCoarsePointer() ? 12 : 32)
       const tilt = (current.x - 0.5) * (isCoarsePointer() ? 0 : 2.4)
 
+      node.style.setProperty('--focus-x', `${(current.x * 100).toFixed(2)}%`)
+      node.style.setProperty('--focus-y', `${(current.y * 100).toFixed(2)}%`)
       node.style.setProperty('--trail-x', `${(trail.x * 100).toFixed(2)}%`)
       node.style.setProperty('--trail-y', `${(trail.y * 100).toFixed(2)}%`)
       node.style.setProperty('--scene-shift-x', `${shiftX.toFixed(2)}px`)
@@ -104,7 +110,6 @@ export function useSceneMotion() {
 
       target.x = 0.5
       target.y = 0.28
-      setPointer(target.x, target.y)
       scheduleUpdate()
     }
 
@@ -155,6 +160,8 @@ export function useSceneMotion() {
     }
 
     setPointer(target.x, target.y)
+    node.style.setProperty('--focus-x', `${(current.x * 100).toFixed(2)}%`)
+    node.style.setProperty('--focus-y', `${(current.y * 100).toFixed(2)}%`)
     node.style.setProperty('--trail-x', `${(trail.x * 100).toFixed(2)}%`)
     node.style.setProperty('--trail-y', `${(trail.y * 100).toFixed(2)}%`)
     window.addEventListener('pointermove', handlePointerMove, { passive: true })

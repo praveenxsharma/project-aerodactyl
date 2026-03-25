@@ -92,25 +92,25 @@
 .scene-spotlight {
   background:
     radial-gradient(
-      circle at var(--pointer-x) var(--pointer-y),
-      rgba(255, 255, 255, 0.22),
-      rgba(255, 255, 255, 0.08) 8%,
-      transparent 18%
+      circle at var(--focus-x, var(--pointer-x)) var(--focus-y, var(--pointer-y)),
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.08) 9%,
+      transparent 20%
     );
-  opacity: 0.88;
+  opacity: 0.8;
 }
 
 .scene-cursor-glow {
   background:
     radial-gradient(
-      circle at var(--pointer-x) var(--pointer-y),
-      rgba(255, 255, 255, 0.16),
-      rgba(136, 148, 255, 0.2) 8%,
-      rgba(255, 158, 120, 0.16) 15%,
-      transparent 25%
+      circle at var(--focus-x, var(--pointer-x)) var(--focus-y, var(--pointer-y)),
+      rgba(255, 255, 255, 0.14),
+      rgba(136, 148, 255, 0.18) 9%,
+      rgba(255, 158, 120, 0.14) 16%,
+      transparent 28%
     );
-  filter: blur(24px);
-  opacity: 1;
+  filter: blur(28px);
+  opacity: 0.88;
 }
 
 .scene-cursor-trail {
@@ -244,23 +244,68 @@
 .action-secondary,
 .feature-link,
 .card-actions a {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.95rem;
+  border-radius: 1rem 1.35rem 1.05rem 1.45rem;
   border: 1px solid transparent;
   font-weight: 700;
   transition:
     transform 220ms var(--spring),
     box-shadow 220ms var(--spring),
     border-color 220ms ease,
-    background-color 220ms ease;
+    background-color 220ms ease,
+    border-radius 260ms var(--spring);
+}
+
+.pill-link::before,
+.action-primary::before,
+.action-secondary::before,
+.feature-link::before,
+.card-actions a::before,
+.pill-link::after,
+.action-primary::after,
+.action-secondary::after,
+.feature-link::after,
+.card-actions a::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  transition:
+    transform 320ms var(--spring),
+    opacity 220ms ease;
 }
 
 .pill-link {
   padding: 0.78rem 1rem;
   background: rgba(255, 255, 255, 0.055);
   border-color: var(--outline-strong);
+}
+
+.pill-link::before,
+.action-primary::before,
+.action-secondary::before,
+.feature-link::before,
+.card-actions a::before {
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 34%, transparent 66%, rgba(255, 255, 255, 0.08));
+  opacity: 0.75;
+}
+
+.pill-link::after,
+.action-primary::after,
+.action-secondary::after,
+.feature-link::after,
+.card-actions a::after {
+  inset: -30% auto -30% -35%;
+  width: 56%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  opacity: 0;
+  transform: translateX(-70%) skewX(-18deg);
 }
 
 .page {
@@ -950,7 +995,17 @@
 .action-secondary:hover,
 .feature-link:hover,
 .card-actions a:hover {
+  border-radius: 1.35rem 1rem 1.4rem 1.08rem;
   box-shadow: 0 22px 42px rgba(0, 0, 0, 0.22);
+}
+
+.pill-link:hover::after,
+.action-primary:hover::after,
+.action-secondary:hover::after,
+.feature-link:hover::after,
+.card-actions a:hover::after {
+  opacity: 1;
+  transform: translateX(210%) skewX(-18deg);
 }
 
 .directory-preview-item:hover,
