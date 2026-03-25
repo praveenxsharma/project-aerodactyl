@@ -5,6 +5,7 @@ import { Reveal } from './components/Reveal'
 import { useSceneMotion } from './hooks/useSceneMotion'
 import {
   builderUpdates,
+  communityHub,
   expansionCards,
   quickStats,
   roms,
@@ -30,6 +31,7 @@ function App() {
   const sceneRef = useSceneMotion()
   const featuredRom = roms.find((rom) => rom.name === 'Evolution X') ?? roms[0]
   const featuredRomHasLink = hasReleaseLink(featuredRom.telegramUrl)
+  const communityHubHasLink = hasReleaseLink(communityHub.telegramUrl)
 
   const featuredStyle: AccentStyle = {
     '--accent': featuredRom.accent,
@@ -96,6 +98,16 @@ function App() {
                 <a className="action-secondary" href="#source-pulse">
                   Read Source Pulse
                 </a>
+                {communityHubHasLink ? (
+                  <a
+                    className="action-secondary"
+                    href={communityHub.telegramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {communityHub.ctaLabel}
+                  </a>
+                ) : null}
               </div>
 
               <div className="hero-story">
@@ -117,6 +129,33 @@ function App() {
             </div>
 
             <div className="hero-stage">
+              <ReactivePanel as="article" className="community-card panel" intensity={0.5}>
+                <div className="feature-topline">
+                  <span className="feature-badge">Community Hub</span>
+                  <span className="ghost-pill">Telegram</span>
+                </div>
+
+                <h2>{communityHub.title}</h2>
+                <p>{communityHub.summary}</p>
+
+                <ul className="community-list" aria-label="Community hub highlights">
+                  {communityHub.highlights.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+
+                {communityHubHasLink ? (
+                  <a
+                    className="feature-link"
+                    href={communityHub.telegramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {communityHub.ctaLabel}
+                  </a>
+                ) : null}
+              </ReactivePanel>
+
               <ReactivePanel
                 as="article"
                 className="hero-feature-card"

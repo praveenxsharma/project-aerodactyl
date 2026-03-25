@@ -41,3 +41,11 @@ export type ExpansionCard = {
   title: string
   summary: string
 }
+
+export type CommunityHub = {
+  title: string
+  summary: string
+  highlights: string[]
+  ctaLabel: string
+  telegramUrl: string
+}

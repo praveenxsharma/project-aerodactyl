@@ -563,6 +563,7 @@
   gap: 1rem;
 }
 
+.community-card,
 .hero-feature-card {
   padding: 1.15rem;
   border-radius: 1.2rem;
@@ -570,6 +571,51 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 18%),
     radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 28%, transparent), transparent 38%),
     linear-gradient(180deg, rgba(9, 9, 11, 0.92), rgba(0, 0, 0, 0.86));
+}
+
+.community-card {
+  display: grid;
+  gap: 0.95rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 20%),
+    radial-gradient(circle at top left, rgba(76, 146, 255, 0.18), transparent 38%),
+    radial-gradient(circle at 82% 16%, rgba(108, 255, 216, 0.12), transparent 26%),
+    linear-gradient(180deg, rgba(9, 9, 11, 0.92), rgba(0, 0, 0, 0.88));
+}
+
+.community-card h2 {
+  font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+  line-height: 0.98;
+}
+
+.community-card p {
+  margin: 0;
+}
+
+.community-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.community-list li {
+  position: relative;
+  padding-left: 1rem;
+  color: var(--muted);
+}
+
+.community-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.58rem;
+  width: 0.44rem;
+  height: 0.44rem;
+  border-radius: 999px;
+  background: rgba(128, 188, 255, 0.92);
+  box-shadow: 0 0 0 0.18rem rgba(128, 188, 255, 0.16);
 }
 
 .feature-topline,

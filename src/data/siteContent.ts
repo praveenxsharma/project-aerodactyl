@@ -1,6 +1,7 @@
 import { roms } from './romCatalog'
 import type {
   BuilderUpdate,
+  CommunityHub,
   ExpansionCard,
   SourceChange,
   SupportDevice,
@@ -13,6 +14,19 @@ export const quickStats = [
   { label: 'Supported devices', value: '2 devices' },
   { label: 'Release flow', value: 'Per-ROM tracking' },
 ]
+
+export const communityHub: CommunityHub = {
+  title: 'Explore Our Device Community On Telegram',
+  summary:
+    'Give users, testers, and builders one shared place for discussion, quick help, screenshots, and release-side updates around the Nothing Phone 2a and 2a Plus.',
+  highlights: [
+    'Bring ROM users, maintainers, and testers into one shared device space.',
+    'Keep discovery simple for new users who want updates, help, and flash guidance.',
+    'Link the homepage to the wider community without mixing it into per-ROM release posts.',
+  ],
+  ctaLabel: 'Explore Device Community',
+  telegramUrl: '',
+}
 
 export const sourceChanges: SourceChange[] = [
   {
