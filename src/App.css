@@ -336,14 +336,9 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(
-      circle at var(--pointer-x) var(--pointer-y),
-      rgba(255, 255, 255, 0.08),
-      transparent 20%
-    ),
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 24%);
-  opacity: 0.62;
+  opacity: 0.56;
 }
 
 .panel::after {
@@ -961,11 +956,31 @@
     inset 0 1px 0 rgba(255, 255, 255, calc(0.18 + var(--panel-active) * 0.08)),
     0 calc(10px + var(--panel-lift) * 1.1) calc(24px + var(--panel-lift) * 1.4)
       rgba(0, 0, 0, calc(0.18 + var(--panel-active) * 0.08));
-  will-change: transform, box-shadow;
+  will-change: auto;
 }
 
 .reactive-panel:hover {
   --panel-hover: 2px;
+}
+
+.reactive-panel::before,
+.panel.reactive-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at var(--panel-glow-x) var(--panel-glow-y),
+      rgba(255, 255, 255, calc(0.04 + var(--panel-active) * 0.08)),
+      rgba(255, 255, 255, calc(var(--panel-active) * 0.025)) 12%,
+      transparent 26%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 24%);
+  opacity: calc(0.5 + var(--panel-active) * 0.28);
+  transition: opacity 160ms ease;
 }
 
 .reactive-panel > * {
