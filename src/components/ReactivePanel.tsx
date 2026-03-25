@@ -28,6 +28,8 @@ export function ReactivePanel<T extends ElementType = 'div'>({
   const frameRef = useRef<number | null>(null)
   const targetRef = useRef({ x: 0.5, y: 0.5, active: 0 })
   const currentRef = useRef({ x: 0.5, y: 0.5, active: 0 })
+  const rectRef = useRef<DOMRect | null>(null)
+  const appliedRef = useRef<Record<string, string>>({})
   const interactiveRef = useRef(true)
 
   useEffect(() => {
@@ -43,8 +45,30 @@ export function ReactivePanel<T extends ElementType = 'div'>({
     updateMode()
     media.addEventListener('change', updateMode)
 
-    return () => media.removeEventListener('change', updateMode)
+    const resetRect = () => {
+      rectRef.current = null
+    }
+
+    window.addEventListener('resize', resetRect, { passive: true })
+    window.addEventListener('scroll', resetRect, { passive: true })
+
+    return () => {
+      media.removeEventListener('change', updateMode)
+      window.removeEventListener('resize', resetRect)
+      window.removeEventListener('scroll', resetRect)
+    }
   }, [])
+
+  const setStyleValue = (name: string, value: string) => {
+    const node = ref.current
+
+    if (!node || appliedRef.current[name] === value) {
+      return
+    }
+
+    appliedRef.current[name] = value
+    node.style.setProperty(name, value)
+  }
 
   const updateStyles = () => {
     const node = ref.current
@@ -65,12 +89,16 @@ export function ReactivePanel<T extends ElementType = 'div'>({
     const rotateX = (0.5 - current.y) * 6 * intensity
     const lift = current.active * 6 * intensity
 
-    node.style.setProperty('--panel-rotate-x', `${rotateX.toFixed(2)}deg`)
-    node.style.setProperty('--panel-rotate-y', `${rotateY.toFixed(2)}deg`)
-    node.style.setProperty('--panel-glow-x', `${(current.x * 100).toFixed(2)}%`)
-    node.style.setProperty('--panel-glow-y', `${(current.y * 100).toFixed(2)}%`)
-    node.style.setProperty('--panel-lift', `${lift.toFixed(2)}px`)
-    node.style.setProperty('--panel-active', current.active.toFixed(3))
+    if (current.active > 0.02) {
+      node.style.willChange = 'transform, box-shadow'
+    }
+
+    setStyleValue('--panel-rotate-x', `${rotateX.toFixed(2)}deg`)
+    setStyleValue('--panel-rotate-y', `${rotateY.toFixed(2)}deg`)
+    setStyleValue('--panel-glow-x', `${(current.x * 100).toFixed(2)}%`)
+    setStyleValue('--panel-glow-y', `${(current.y * 100).toFixed(2)}%`)
+    setStyleValue('--panel-lift', `${lift.toFixed(2)}px`)
+    setStyleValue('--panel-active', current.active.toFixed(3))
 
     const settled =
       Math.abs(target.x - current.x) < 0.002 &&
@@ -78,6 +106,9 @@ export function ReactivePanel<T extends ElementType = 'div'>({
       Math.abs(target.active - current.active) < 0.01
 
     if (settled) {
+      if (target.active === 0) {
+        node.style.willChange = 'auto'
+      }
       frameRef.current = null
       return
     }
@@ -106,7 +137,8 @@ export function ReactivePanel<T extends ElementType = 'div'>({
       return
     }
 
-    const rect = node.getBoundingClientRect()
+    const rect = rectRef.current ?? node.getBoundingClientRect()
+    rectRef.current = rect
     const x = (event.clientX - rect.left) / rect.width
     const y = (event.clientY - rect.top) / rect.height
 
@@ -116,11 +148,23 @@ export function ReactivePanel<T extends ElementType = 'div'>({
     scheduleUpdate()
   }
 
+  const handlePointerEnter: NonNullable<ComponentPropsWithoutRef<'div'>['onPointerEnter']> = () => {
+    const node = ref.current
+
+    if (!node || !interactiveRef.current) {
+      return
+    }
+
+    rectRef.current = node.getBoundingClientRect()
+    node.style.willChange = 'transform, box-shadow'
+  }
+
   const handlePointerLeave: NonNullable<ComponentPropsWithoutRef<'div'>['onPointerLeave']> = () => {
     if (!interactiveRef.current) {
       return
     }
 
+    rectRef.current = null
     targetRef.current.x = 0.5
     targetRef.current.y = 0.5
     targetRef.current.active = 0
@@ -131,6 +175,7 @@ export function ReactivePanel<T extends ElementType = 'div'>({
     <Component
       {...rest}
       className={`reactive-panel ${className}`.trim()}
+      onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerMove={handlePointerMove}
       ref={ref}

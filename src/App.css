@@ -140,7 +140,8 @@
   border-radius: 1.15rem;
   background: linear-gradient(180deg, rgba(10, 10, 12, 0.9), rgba(0, 0, 0, 0.84));
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px) saturate(1.03);
+  backdrop-filter: blur(8px) saturate(1.02);
+  contain: paint;
   transition:
     box-shadow 220ms var(--spring),
     border-color 220ms ease;
@@ -325,6 +326,7 @@
     linear-gradient(180deg, rgba(14, 14, 16, 0.88), rgba(0, 0, 0, 0.94)),
     var(--surface);
   box-shadow: var(--shadow-large);
+  contain: paint;
   transition:
     box-shadow 220ms var(--spring),
     border-color 220ms ease;
@@ -957,6 +959,7 @@
     0 calc(10px + var(--panel-lift) * 1.1) calc(24px + var(--panel-lift) * 1.4)
       rgba(0, 0, 0, calc(0.18 + var(--panel-active) * 0.08));
   will-change: auto;
+  backface-visibility: hidden;
 }
 
 .reactive-panel:hover {
@@ -985,6 +988,15 @@
 
 .reactive-panel > * {
   transform: translateZ(calc(var(--panel-active) * 10px));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rom-section,
+  .insight-panel,
+  .support-panel {
+    content-visibility: auto;
+    contain-intrinsic-size: 720px;
+  }
 }
 
 .nav-links a:hover,

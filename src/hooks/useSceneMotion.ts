@@ -41,21 +41,31 @@ export function useSceneMotion() {
     const target = { x: center.x, y: center.y, scroll: 0 }
     const current = { x: center.x, y: center.y, scroll: 0 }
     const trail = { x: center.x, y: center.y }
+    const applied = new Map<string, string>()
     let frame: number | null = null
 
+    const setStyleValue = (name: string, value: string) => {
+      if (applied.get(name) === value) {
+        return
+      }
+
+      applied.set(name, value)
+      node.style.setProperty(name, value)
+    }
+
     const setPointer = (x: number, y: number) => {
-      node.style.setProperty('--pointer-x', `${(x * 100).toFixed(2)}%`)
-      node.style.setProperty('--pointer-y', `${(y * 100).toFixed(2)}%`)
+      setStyleValue('--pointer-x', `${(x * 100).toFixed(2)}%`)
+      setStyleValue('--pointer-y', `${(y * 100).toFixed(2)}%`)
     }
 
     const setFocus = (x: number, y: number) => {
-      node.style.setProperty('--focus-x', `${(x * 100).toFixed(2)}%`)
-      node.style.setProperty('--focus-y', `${(y * 100).toFixed(2)}%`)
+      setStyleValue('--focus-x', `${(x * 100).toFixed(2)}%`)
+      setStyleValue('--focus-y', `${(y * 100).toFixed(2)}%`)
     }
 
     const setTrail = (x: number, y: number) => {
-      node.style.setProperty('--trail-x', `${(x * 100).toFixed(2)}%`)
-      node.style.setProperty('--trail-y', `${(y * 100).toFixed(2)}%`)
+      setStyleValue('--trail-x', `${(x * 100).toFixed(2)}%`)
+      setStyleValue('--trail-y', `${(y * 100).toFixed(2)}%`)
     }
 
     const updateTarget = (clientX: number, clientY: number) => {
@@ -96,10 +106,10 @@ export function useSceneMotion() {
       setPointer(focusX, focusY)
       setFocus(focusX, focusY)
       setTrail(trail.x, trail.y)
-      node.style.setProperty('--scene-shift-x', `${shiftX.toFixed(2)}px`)
-      node.style.setProperty('--scene-shift-y', `${shiftY.toFixed(2)}px`)
-      node.style.setProperty('--scene-tilt', `${tilt.toFixed(2)}deg`)
-      node.style.setProperty('--scroll-progress', current.scroll.toFixed(4))
+      setStyleValue('--scene-shift-x', `${shiftX.toFixed(2)}px`)
+      setStyleValue('--scene-shift-y', `${shiftY.toFixed(2)}px`)
+      setStyleValue('--scene-tilt', `${tilt.toFixed(2)}deg`)
+      setStyleValue('--scroll-progress', current.scroll.toFixed(4))
 
       const settled =
         Math.abs(target.x - current.x) < (coarse ? 0.003 : 0.0015) &&
@@ -209,10 +219,10 @@ export function useSceneMotion() {
       setPointer(nextCenter.x, nextCenter.y)
       setFocus(nextCenter.x, nextCenter.y)
       setTrail(nextCenter.x, nextCenter.y)
-      node.style.setProperty('--scene-shift-x', '0px')
-      node.style.setProperty('--scene-shift-y', '0px')
-      node.style.setProperty('--scene-tilt', '0deg')
-      node.style.setProperty('--scroll-progress', '0')
+      setStyleValue('--scene-shift-x', '0px')
+      setStyleValue('--scene-shift-y', '0px')
+      setStyleValue('--scene-tilt', '0deg')
+      setStyleValue('--scroll-progress', '0')
     }
 
     const handleModeChange = () => {
