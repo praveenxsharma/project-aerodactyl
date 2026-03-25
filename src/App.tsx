@@ -22,9 +22,14 @@ function toSectionId(name: string) {
   return `rom-${name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`
 }
 
+function hasReleaseLink(url: string) {
+  return Boolean(url) && url.startsWith('https://t.me/')
+}
+
 function App() {
   const sceneRef = useSceneMotion()
   const featuredRom = roms.find((rom) => rom.name === 'Evolution X') ?? roms[0]
+  const featuredRomHasLink = hasReleaseLink(featuredRom.telegramUrl)
 
   const featuredStyle: AccentStyle = {
     '--accent': featuredRom.accent,
@@ -59,7 +64,7 @@ function App() {
         </nav>
 
         <div className="topbar-actions">
-          <span className="status-badge">Per-ROM layout</span>
+          <span className="status-badge">Release Hub</span>
           <a className="pill-link" href="#rom-directory">
             Open ROM Directory
           </a>
@@ -76,29 +81,28 @@ function App() {
                 <span className="tonal-chip">Builder notes</span>
               </div>
 
-              <p className="eyebrow">Project Aerodactyl</p>
-              <h1>Each ROM now gets its own section, with less room for confusion.</h1>
+              <p className="eyebrow">Nothing Phone 2a / 2a Plus</p>
+              <h1>A clean release hub for every ROM you build.</h1>
               <p className="lede">
-                The site has been reorganized around distinct ROM lanes so users
-                can move from one build to the next without mixing versions,
-                devices, or Telegram links.
+                Track current versions, recent source work, and builder-side
+                progress in one place, with a dedicated section for each active
+                ROM.
               </p>
 
               <div className="hero-actions">
                 <a className="action-primary" href="#rom-directory">
-                  Browse ROM Sections
+                  View Current Builds
                 </a>
                 <a className="action-secondary" href="#source-pulse">
-                  View Source Pulse
+                  Read Source Pulse
                 </a>
               </div>
 
               <div className="hero-story">
-                <strong>Cleaner base palette, stronger separation.</strong>
+                <strong>Built for quick scanning and clean release tracking.</strong>
                 <p>
-                  The overall color system is calmer now, and the ROM-specific
-                  accents are doing the identity work instead of the whole page
-                  fighting for attention.
+                  Every ROM gets its own lane with version context, supported
+                  devices, source-side notes, and release handoff space.
                 </p>
               </div>
 
@@ -138,9 +142,18 @@ function App() {
                   <span>{featuredRom.devices.join(' / ')}</span>
                 </div>
 
-                <a className="feature-link" href={featuredRom.telegramUrl} target="_blank" rel="noreferrer">
-                  Open Telegram Post
-                </a>
+                {featuredRomHasLink ? (
+                  <a
+                    className="feature-link"
+                    href={featuredRom.telegramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open Release Post
+                  </a>
+                ) : (
+                  <span className="feature-link is-disabled">Telegram Release Link</span>
+                )}
               </ReactivePanel>
 
               <div className="directory-preview">
@@ -174,10 +187,10 @@ function App() {
           <section className="section-banner panel" id="rom-directory">
             <div className="section-banner-copy">
               <p className="eyebrow">ROM Directory</p>
-              <h2>Dedicated sections for every ROM you build.</h2>
+              <h2>Current ROM lineup, organized by build lane.</h2>
               <p>
-                Each entry below has its own anchored lane with version, device
-                support, release note summary, and a direct Telegram handoff.
+                Jump straight to the ROM you want without mixing releases,
+                supported devices, or update notes.
               </p>
             </div>
 
@@ -210,6 +223,7 @@ function App() {
 
         <section className="rom-sections">
           {roms.map((rom, index) => {
+            const romHasLink = hasReleaseLink(rom.telegramUrl)
             const accentStyle: AccentStyle = {
               '--accent': rom.accent,
               '--accent-soft': rom.accentSoft,
@@ -246,9 +260,15 @@ function App() {
                       </ul>
 
                       <div className="card-actions">
-                        <a href={rom.telegramUrl} target="_blank" rel="noreferrer">
-                          Telegram Download
-                        </a>
+                        {romHasLink ? (
+                          <a href={rom.telegramUrl} target="_blank" rel="noreferrer">
+                            Telegram Release
+                          </a>
+                        ) : (
+                          <span className="feature-link is-disabled card-action-disabled">
+                            Telegram Release
+                          </span>
+                        )}
                         <span className="ghost-pill">{rom.maintenanceNote}</span>
                       </div>
                     </div>
@@ -280,11 +300,11 @@ function App() {
               <div className="insight-head">
                 <div>
                   <p className="eyebrow">Source Pulse</p>
-                  <h2>Recent source changes in a format people can actually read</h2>
+                  <h2>Recent source work, summarized for users and testers</h2>
                 </div>
                 <p>
-                  This section keeps recent source work concise instead of
-                  reading like raw commit output.
+                  Surface the important framework, device tree, kernel, and
+                  vendor-side changes without dumping raw commit noise.
                 </p>
               </div>
 
@@ -315,11 +335,11 @@ function App() {
               <div className="insight-head">
                 <div>
                   <p className="eyebrow">Builder Notes</p>
-                  <h2>Builder-side progress and project notes</h2>
+                  <h2>Builder-side progress, testing notes, and rollout context</h2>
                 </div>
                 <p>
-                  Use this area for bring-up status, testing notes, and general
-                  progress between releases.
+                  Keep community-facing notes readable while still making room
+                  for bring-up status, blockers, and release readiness.
                 </p>
               </div>
 
@@ -344,11 +364,11 @@ function App() {
             <div className="support-copy">
               <div>
                 <p className="eyebrow">Device Coverage</p>
-                <h2>Built around your Nothing lineup with room to grow.</h2>
+                <h2>Focused on Nothing Phone 2a and 2a Plus.</h2>
               </div>
               <p>
-                The data model still scales cleanly if you add more ROMs,
-                devices, or automation later.
+                The structure is ready for more ROMs, more devices, and a
+                cleaner release workflow as the project expands.
               </p>
             </div>
 

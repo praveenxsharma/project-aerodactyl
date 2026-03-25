@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# Project Aerodactyl
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Project Aerodactyl is a release hub for custom ROM builds targeting the Nothing Phone 2a and Nothing Phone 2a Plus. It is designed to present current ROM versions, source-side changes, builder notes, and per-ROM release tracking in a clean layout that works well on both desktop and mobile.
 
-Currently, two official plugins are available:
+Live site: `https://project-aerodactyl.netlify.app`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+GitHub: `https://github.com/TwistedVision518/project-aerodactyl`
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- TypeScript
+- Vite
+- CSS with custom motion and scene effects
+- Netlify for hosting
 
-## Expanding the ESLint configuration
+## Local Development
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Install dependencies:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Start the dev server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm dev
 ```
+
+Build for production:
+
+```bash
+pnpm build
+```
+
+Run lint checks:
+
+```bash
+pnpm exec eslint .
+```
+
+## Content Editing
+
+Most of the site content lives in:
+
+`src/data/siteContent.ts`
+
+That file controls:
+
+- ROM names, versions, statuses, and device targets
+- Source Pulse entries
+- Builder Notes entries
+- Device coverage cards
+- Expansion / workflow cards
+
+If you want live release buttons, update the `telegramUrl` values in `src/data/siteContent.ts` with the correct Telegram post links for each ROM.
+
+## Deployment
+
+The site is already connected to Netlify and can be redeployed from this project directory.
+
+Manual production deploy:
+
+```bash
+pnpm --package=netlify-cli dlx netlify deploy --prod
+```
+
+Netlify project:
+
+`https://app.netlify.com/projects/project-aerodactyl`
+
+## Notes
+
+- The layout is organized per ROM to avoid mixing release context across different builds.
+- Mobile performance is prioritized by reducing heavier pointer effects on coarse/touch devices.
+- The visual system uses a near-AMOLED black base with animated color fields layered behind the content.
