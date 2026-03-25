@@ -1300,17 +1300,18 @@
 
   .interactive-scene::before,
   .interactive-scene::after {
-    opacity: 0.34;
+    opacity: 0.52;
     will-change: auto;
   }
 
   .interactive-scene::before {
-    filter: blur(74px) saturate(1.05);
-    animation-duration: 30s;
+    filter: blur(66px) saturate(1.08);
+    animation-duration: 24s;
   }
 
   .interactive-scene::after {
-    filter: blur(40px);
+    filter: blur(32px);
+    opacity: 0.7;
   }
 
   .scene-aurora,
@@ -1321,21 +1322,22 @@
   }
 
   .scene-aurora {
-    filter: blur(56px);
+    filter: blur(48px);
+    opacity: 0.96;
   }
 
   .scene-spotlight,
   .scene-cursor-glow {
-    opacity: 0.72;
+    opacity: 0.86;
   }
 
   .scene-cursor-glow {
-    filter: blur(18px);
+    filter: blur(16px);
   }
 
   .scene-cursor-trail {
-    opacity: 0.54;
-    filter: blur(22px);
+    opacity: 0.72;
+    filter: blur(18px);
   }
 
   .reactive-panel,

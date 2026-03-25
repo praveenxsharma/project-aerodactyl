@@ -3,6 +3,8 @@
 :root {
   --pointer-x: 50%;
   --pointer-y: 28%;
+  --focus-x: 50%;
+  --focus-y: 28%;
   --trail-x: 50%;
   --trail-y: 30%;
   --scene-shift-x: 0px;
